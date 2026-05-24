@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate, useParams, Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Anchor,
   Badge,
@@ -19,10 +19,7 @@ import { notifications } from '@mantine/notifications';
 import { IconChecks, IconShieldLock } from '@tabler/icons-react';
 import { supabase } from '@/lib/supabase';
 
-const INVITE_CODE = import.meta.env.VITE_ADMIN_INVITE_CODE as string | undefined;
-
 export default function AdminSignupPage() {
-  const { code } = useParams<{ code: string }>();
   const [loading, setLoading] = useState(false);
 
   const form = useForm({
@@ -33,12 +30,6 @@ export default function AdminSignupPage() {
       full_name: (v) => (v.trim().length < 2 ? 'Укажите имя' : null),
     },
   });
-
-  // Если код в env не задан или не совпадает — кидаем на /login,
-  // никаких подсказок что такой роут вообще существует.
-  if (!INVITE_CODE || code !== INVITE_CODE) {
-    return <Navigate to="/login" replace />;
-  }
 
   const submit = form.onSubmit(async (values) => {
     setLoading(true);

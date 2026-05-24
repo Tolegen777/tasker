@@ -26,7 +26,7 @@ export default function App() {
     return (
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin-invite/:code" element={<AdminSignupPage />} />
+        <Route path="/secret-admin-portal-9k4m2p7q3xr8" element={<AdminSignupPage />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     );
@@ -41,7 +41,7 @@ export default function App() {
         <Route path="profile" element={<ProfilePage />} />
       </Route>
       <Route path="/login" element={<Navigate to="/" replace />} />
-      <Route path="/admin-invite/:code" element={<Navigate to="/" replace />} />
+      <Route path="/secret-admin-portal-9k4m2p7q3xr8" element={<Navigate to="/" replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
