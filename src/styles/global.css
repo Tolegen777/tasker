@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Глобальный «aurora» фон под лейаут */
+.app-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(124, 92, 255, 0.22), transparent 55%),
+    radial-gradient(circle at 88% 12%, rgba(34, 211, 238, 0.18), transparent 50%),
+    radial-gradient(circle at 60% 90%, rgba(244, 114, 182, 0.18), transparent 50%);
+  filter: blur(0px);
+  pointer-events: none;
+}
+
+[data-mantine-color-scheme='dark'] body {
+  background-color: #0a0a12;
+}
+[data-mantine-color-scheme='light'] body {
+  background-color: #f6f6fb;
+}
+
+.glass {
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+[data-mantine-color-scheme='dark'] .glass {
+  background: rgba(20, 20, 32, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+[data-mantine-color-scheme='light'] .glass {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.kanban-scroller {
+  scrollbar-width: thin;
+}
+
+.task-card {
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+.column-drop-active {
+  outline: 2px dashed var(--mantine-color-violet-5);
+  outline-offset: -4px;
+}
+
+.calendar-day {
+  min-height: 110px;
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--mantine-color-body);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+.calendar-day.is-today {
+  border-color: var(--mantine-color-violet-6);
+  box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.18);
+}
+.calendar-day.is-outside {
+  opacity: 0.45;
+}
+.calendar-day-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mantine-color-dimmed);
+}
+.calendar-day.is-today .calendar-day-num {
+  color: var(--mantine-color-violet-6);
+}
+.calendar-chip {
+  font-size: 11px;
+  border-radius: 8px;
+  padding: 3px 6px;
+  background: var(--mantine-color-violet-light);
+  color: var(--mantine-color-violet-light-color);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
