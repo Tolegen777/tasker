@@ -21,13 +21,15 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { notifications } from '@mantine/notifications';
-import { IconPlus, IconSearch } from '@tabler/icons-react';
+import { IconPlus, IconSearch, IconUsers } from '@tabler/icons-react';
 import { useAuth } from '@/lib/auth';
 import { useTasksStore } from '@/store/tasks';
+import { useMeetingsStore } from '@/store/meetings';
 import { STATUS_LABEL, type TaskStatus, type TaskWithRelations } from '@/types/db';
 import { KanbanColumn } from '@/components/KanbanColumn';
 import { TaskCard } from '@/components/TaskCard';
 import { TaskModal } from '@/components/TaskModal';
+import { MeetingModal } from '@/components/MeetingModal';
 
 const COLUMNS: TaskStatus[] = ['todo', 'in_progress', 'done'];
 
@@ -36,18 +38,27 @@ export default function BoardPage() {
   const isAdmin = profile?.role === 'admin';
 
   const { tasks, loaded, load, subscribe, updateTask } = useTasksStore();
+  const loadMeetings = useMeetingsStore((s) => s.load);
+  const subMeetings = useMeetingsStore((s) => s.subscribe);
+  const meetingsLoaded = useMeetingsStore((s) => s.loaded);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [modalTask, setModalTask] = useState<TaskWithRelations | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalInitStatus, setModalInitStatus] = useState<TaskStatus>('todo');
+  const [meetingModalOpen, setMeetingModalOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [filterAssignee, setFilterAssignee] = useState<'all' | 'mine'>('all');
 
   useEffect(() => {
     if (!loaded) void load();
+    if (!meetingsLoaded) void loadMeetings();
     const unsub = subscribe();
-    return unsub;
-  }, [load, subscribe, loaded]);
+    const unsubM = subMeetings();
+    return () => {
+      unsub();
+      unsubM();
+    };
+  }, [load, subscribe, loaded, loadMeetings, subMeetings, meetingsLoaded]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -162,12 +173,21 @@ export default function BoardPage() {
             ]}
           />
         </Group>
-        <Button
-          leftSection={<IconPlus size={16} />}
-          onClick={() => openCreate('todo')}
-        >
-          Новая задача
-        </Button>
+        <Group gap="xs">
+          <Button
+            variant="default"
+            leftSection={<IconUsers size={16} />}
+            onClick={() => setMeetingModalOpen(true)}
+          >
+            Новое совещание
+          </Button>
+          <Button
+            leftSection={<IconPlus size={16} />}
+            onClick={() => openCreate('todo')}
+          >
+            Новая задача
+          </Button>
+        </Group>
       </Group>
 
       <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>
@@ -200,6 +220,11 @@ export default function BoardPage() {
         onClose={() => setModalOpen(false)}
         task={modalTask}
         initialStatus={modalInitStatus}
+      />
+      <MeetingModal
+        opened={meetingModalOpen}
+        onClose={() => setMeetingModalOpen(false)}
+        meeting={null}
       />
     </Stack>
   );

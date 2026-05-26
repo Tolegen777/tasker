@@ -56,3 +56,30 @@ export const ROLE_LABEL: Record<Role, string> = {
   admin: 'Администратор',
   employee: 'Сотрудник',
 };
+
+export interface Meeting {
+  id: string;
+  title: string;
+  description: string | null;
+  location: string | null;
+  starts_at: string; // timestamptz ISO
+  duration_minutes: number;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MeetingWithRelations extends Meeting {
+  author: Profile | null;
+  participants: Profile[];
+}
+
+export const DURATION_PRESETS: { value: number; label: string }[] = [
+  { value: 15, label: '15 минут' },
+  { value: 30, label: '30 минут' },
+  { value: 45, label: '45 минут' },
+  { value: 60, label: '1 час' },
+  { value: 90, label: '1.5 часа' },
+  { value: 120, label: '2 часа' },
+  { value: 180, label: '3 часа' },
+];
